@@ -1,0 +1,282 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BUESO · Caldito Casero</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=DynaPuff:wght@500;600&family=Mansalva&family=Amatic+SC:wght@400;700&display=swap');:root{--r:#e20d18;--c:#fffde8;--i:#29251f;--b:#2f89a3;--y:#dfe72f}*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:var(--c);font-family:DM Sans;color:var(--i)}#vp{position:fixed;inset:0;overflow:hidden;cursor:grab}#world{position:absolute;width:4700px;height:3200px;background:linear-gradient(#e20d1815 1px,transparent 1px),linear-gradient(90deg,#e20d1815 1px,transparent 1px),var(--c);background-size:70px 70px;will-change:transform}.piece{position:absolute}.asset{filter:drop-shadow(0 18px 18px #35100e20)}.photo{box-shadow:0 20px 45px #35100e24}.header{position:fixed;z-index:50;left:22px;top:18px;width:190px}.header img{width:100%}nav{position:fixed;z-index:51;right:20px;top:18px;display:flex;gap:8px;max-width:70vw;flex-wrap:wrap;justify-content:flex-end}nav button{border:1.5px solid var(--i);border-radius:999px;background:var(--c);padding:8px 12px;font-weight:700;cursor:pointer;transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease}nav button:hover{background:var(--r);color:var(--c);border-color:var(--r);transform:translateY(-1px)}nav button.active{background:var(--i);color:var(--c);border-color:var(--i)}nav button[data-go='pedir']{background:var(--r);color:var(--c);border-color:var(--r)}nav button:focus-visible{outline:3px solid var(--y);outline-offset:3px}.card{background:var(--c);border:2px solid var(--r);padding:30px;width:520px;box-shadow:0 18px 40px #35100e20}.card h2,.pet h2{font:600 48px/.95 DynaPuff;margin:0 0 16px;color:var(--r)}.card p,.pet p{font-size:18px;line-height:1.5}.poster{width:520px;padding:36px;background:var(--r);color:var(--c);box-shadow:0 18px 40px #35100e25}.mega{font:600 67px/.86 DynaPuff;letter-spacing:-.04em}.scrib{font:38px/1 Mansalva;margin-top:22px}.pet{background:var(--b);color:var(--c);border:10px solid var(--y);padding:32px;width:570px}.pet h2{color:var(--y)}.label{position:absolute;font:38px/1 Mansalva;color:var(--r);max-width:430px}.star{position:absolute;font-size:140px;color:var(--r)}#map{position:fixed;right:20px;bottom:20px;width:185px;height:128px;background:#fffde8dc;border:1px solid #29251f99;z-index:60;overflow:hidden;border-radius:4px}.dot{position:absolute;background:#e20d185c;border:0;transition:background .18s ease,box-shadow .18s ease,opacity .18s ease,transform .18s ease;opacity:.68;transform-origin:center}.dot.image-dot{background:#29251f52;outline:1px solid #29251f35;z-index:2}.dot.image-dot.map-hot{background:var(--r);opacity:1;box-shadow:0 0 0 2px #fffde8,0 0 11px 4px #e20d1870;transform:scale(1.22);z-index:5}.dot.image-dot.pet-hot{background:var(--b);box-shadow:0 0 0 2px #fffde8,0 0 11px 4px #2f89a378}#mc{position:absolute;border:2px solid var(--b);background:#2f89a30b}.help{position:fixed;left:20px;bottom:20px;z-index:60;background:#fffde8e8;border:1px solid #29251f99;padding:8px 11px;font-size:13px;line-height:1.25;border-radius:999px}@media(max-width:700px){.header{width:125px;left:14px;top:14px}nav{right:12px;top:12px;max-width:68vw;gap:5px}nav button{font-size:11px;padding:7px 9px}#map{width:128px;height:88px;right:12px;bottom:12px}.help{left:12px;bottom:12px;font-size:12px;max-width:190px;border-radius:12px}.mega{font-size:58px}.card h2,.pet h2{font-size:42px}}
+
+
+/* --- BUESO motion-brand intro: lunares -> logo -> destellos -> disolución --- */
+#brandIntro{
+  position:fixed; inset:0; z-index:9999; overflow:hidden;
+  display:grid; place-items:center; background:#fffde8;
+  pointer-events:none;
+  animation:introCurtain 4.8s cubic-bezier(.22,.61,.36,1) forwards;
+}
+.intro-stage{
+  position:relative;
+  width:min(82vw,760px);
+  aspect-ratio:1.8/1;
+  display:grid; place-items:center;
+}
+.intro-logo{
+  position:relative; z-index:4;
+  width:min(68vw,620px); height:auto;
+  opacity:0; transform:scale(.96);
+  filter:drop-shadow(0 10px 18px rgba(226,13,24,.08));
+  animation:logoReveal 4.35s cubic-bezier(.22,.61,.36,1) forwards;
+}
+.spot{
+  position:absolute; z-index:2; display:block;
+  width:18px; height:18px; border-radius:47% 53% 55% 45% / 44% 48% 52% 56%;
+  background:#e20d18; opacity:0;
+  transform:translate(var(--x),var(--y)) scale(.15) rotate(var(--r));
+  animation:spotDance 4.05s cubic-bezier(.22,.61,.36,1) forwards;
+  animation-delay:var(--d);
+}
+.s1{--x:-270px;--y:-120px;--r:18deg;--d:.18s;width:13px;height:13px}
+.s2{--x:-205px;--y:105px;--r:-12deg;--d:.26s;width:28px;height:25px}
+.s3{--x:-115px;--y:-150px;--r:34deg;--d:.34s;width:17px;height:19px}
+.s4{--x:-55px;--y:145px;--r:-22deg;--d:.22s;width:11px;height:11px}
+.s5{--x:65px;--y:-145px;--r:13deg;--d:.42s;width:24px;height:21px}
+.s6{--x:155px;--y:130px;--r:29deg;--d:.30s;width:16px;height:18px}
+.s7{--x:255px;--y:-95px;--r:-28deg;--d:.38s;width:31px;height:28px}
+.s8{--x:300px;--y:70px;--r:17deg;--d:.20s;width:10px;height:10px}
+.s9{--x:-315px;--y:35px;--r:44deg;--d:.48s;width:20px;height:17px}
+.s10{--x:215px;--y:5px;--r:-15deg;--d:.52s;width:12px;height:14px}
+.s11{--x:-165px;--y:-15px;--r:24deg;--d:.58s;width:9px;height:9px}
+.s12{--x:105px;--y:78px;--r:-31deg;--d:.46s;width:19px;height:16px}
+.spark{
+  position:absolute; z-index:5; color:#e20d18;
+  font-family:Georgia,serif; line-height:1; opacity:0;
+  transform:scale(.2) rotate(-8deg);
+  animation:sparkle 1.05s ease-in-out forwards;
+}
+.k1{left:12%;top:22%;font-size:38px;animation-delay:1.82s}
+.k2{right:10%;top:28%;font-size:26px;animation-delay:2.08s}
+.k3{right:22%;bottom:18%;font-size:18px;animation-delay:2.28s}
+@keyframes spotDance{
+  0%{opacity:0;transform:translate(var(--x),var(--y)) scale(.12) rotate(var(--r))}
+  16%{opacity:.92}
+  36%{opacity:.96;transform:translate(calc(var(--x)*.58),calc(var(--y)*.58)) scale(1) rotate(0deg)}
+  58%{opacity:.70;transform:translate(calc(var(--x)*.35),calc(var(--y)*.35)) scale(.72)}
+  76%{opacity:.52}
+  100%{opacity:0;transform:translate(calc(var(--x)*1.14),calc(var(--y)*1.14)) scale(.28) rotate(24deg)}
+}
+@keyframes logoReveal{
+  0%,15%{opacity:0;transform:scale(.96)}
+  30%{opacity:1;transform:scale(1)}
+  67%{opacity:1;transform:scale(1)}
+  82%{opacity:.92;transform:scale(1.008)}
+  100%{opacity:0;transform:scale(1.025)}
+}
+@keyframes sparkle{
+  0%{opacity:0;transform:scale(.15) rotate(-12deg)}
+  38%{opacity:1;transform:scale(1.12) rotate(4deg)}
+  62%{opacity:.9;transform:scale(.82) rotate(0)}
+  100%{opacity:0;transform:scale(.15) rotate(12deg)}
+}
+@keyframes introCurtain{
+  0%,78%{opacity:1;visibility:visible}
+  100%{opacity:0;visibility:hidden}
+}
+@media (max-width:700px){
+  .intro-stage{width:92vw}
+  .intro-logo{width:78vw}
+  .spot{transform-origin:center}
+  .s1,.s7,.s8,.s9{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  #brandIntro{animation:introCurtainReduced 1.4s ease forwards}
+  .spot,.spark{display:none}
+  .intro-logo{opacity:1;transform:none;animation:none}
+  @keyframes introCurtainReduced{0%,68%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
+}
+
+
+/* --- Imágenes interactivas + modal BUESO --- */
+.interactive-img{cursor:pointer;transition:filter .22s ease,box-shadow .22s ease,opacity .22s ease;outline:0}
+.interactive-img:hover,.interactive-img:focus-visible{filter:brightness(1.09) saturate(1.08) drop-shadow(0 0 18px rgba(226,13,24,.42));box-shadow:0 0 0 5px rgba(255,253,232,.92),0 0 0 9px rgba(226,13,24,.9),0 24px 55px rgba(53,16,14,.28);z-index:25}
+.interactive-img::selection{background:transparent}
+#discoverTip{position:fixed;z-index:85;pointer-events:none;opacity:0;transform:translate(-50%,-115%) scale(.94);background:var(--i);color:var(--c);border:2px solid var(--c);border-radius:999px;padding:11px 18px;font:800 17px/1 DM Sans;letter-spacing:.07em;box-shadow:0 7px 20px #0003;transition:opacity .15s ease,transform .15s ease;white-space:nowrap}
+#discoverTip.on{opacity:1;transform:translate(-50%,-115%) scale(1)}
+#productModal{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:24px;background:rgba(41,37,31,.48);backdrop-filter:blur(5px);opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}
+#productModal.open{opacity:1;visibility:visible}
+.modal-card{position:relative;width:min(620px,92vw);max-height:min(78vh,760px);overflow:auto;background:var(--c);border:3px solid var(--i);border-radius:24px;padding:34px 34px 30px;box-shadow:12px 14px 0 var(--r),0 30px 80px #0004;transform:scale(.94) translateY(12px);transition:transform .24s cubic-bezier(.2,.8,.2,1)}
+#productModal.open .modal-card{transform:scale(1) translateY(0)}
+.modal-kicker{display:inline-block;background:var(--r);color:var(--c);border-radius:999px;padding:7px 11px;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.modal-card h2{font:600 clamp(34px,5vw,55px)/.95 DynaPuff;margin:18px 50px 14px 0;color:var(--r)}
+.modal-card p{font-size:18px;line-height:1.55;margin:0 0 18px}.modal-card ul{font-size:17px;line-height:1.55;padding-left:22px}.modal-close{position:absolute;right:18px;top:16px;width:42px;height:42px;border:2px solid var(--i);border-radius:50%;background:var(--c);font-size:25px;line-height:1;cursor:pointer}.modal-action{display:inline-block;margin-top:8px;border:2px solid var(--i);border-radius:999px;background:var(--r);color:var(--c);padding:12px 17px;font-weight:800;text-decoration:none;cursor:pointer}.modal-action:hover{transform:translateY(-1px)}
+@media(max-width:700px){.interactive-img:hover{filter:none;box-shadow:0 20px 45px #35100e24}.modal-card{padding:28px 22px 24px;border-radius:18px}.modal-card p,.modal-card ul{font-size:16px}}
+
+/* --- Conecta con BUESO · identidad + colores de cada red --- */
+.social-dock{position:fixed;left:18px;bottom:52px;z-index:120;display:flex;align-items:center;gap:10px;padding:10px 12px;border:2px solid var(--r);border-radius:24px;background:rgba(255,253,232,.97);box-shadow:0 12px 32px #35100e2b;backdrop-filter:blur(10px)}
+.social-label{padding:0 12px 0 7px;font:700 27px/.9 'Amatic SC','Mansalva',cursive;letter-spacing:.035em;color:var(--r);white-space:nowrap;transform:rotate(-1deg)}
+.social-link{width:58px;height:58px;display:grid;place-items:center;border:0;border-radius:17px;color:#fff;text-decoration:none;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s ease,filter .2s ease;box-shadow:0 5px 0 #29251f26,0 8px 18px #35100e1c;position:relative;overflow:hidden}
+.social-link svg{width:29px;height:29px;display:block;fill:currentColor;stroke:currentColor;stroke-width:1.8}
+.social-link:hover,.social-link:focus-visible{transform:translateY(-5px) scale(1.09) rotate(-1deg);filter:saturate(1.12) brightness(1.05);outline:3px solid var(--y);outline-offset:3px}
+.social-link.ig{background:radial-gradient(circle at 30% 105%,#feda75 0 18%,#fa7e1e 32%,#d62976 55%,#962fbf 76%,#4f5bd5 100%)}
+.social-link.tt{background:#111;box-shadow:3px 0 0 #25f4ee,-3px 0 0 #fe2c55,0 8px 18px #35100e1c}
+.social-link.wa{background:#25D366}
+.social-link.tel{background:var(--r)}
+.social-name{position:absolute;left:50%;bottom:-31px;transform:translateX(-50%);font:700 20px/1 'Amatic SC','Mansalva',cursive;color:var(--i);background:var(--c);border:1px solid #29251f55;border-radius:8px;padding:4px 7px;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .16s ease,bottom .16s ease}
+.social-link:hover .social-name,.social-link:focus-visible .social-name{opacity:1;bottom:-35px}
+.order-wa{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:13px 18px;border:2px solid var(--i);border-radius:999px;background:#25D366;color:#fff;font-weight:900;text-decoration:none;box-shadow:4px 5px 0 var(--i);transition:transform .18s ease}.order-wa:hover{transform:translateY(-2px)}
+@media(max-width:700px){.social-dock{left:10px;bottom:48px;padding:7px 8px;gap:6px;border-radius:19px}.social-label{font-size:23px;padding-right:7px}.social-link{width:48px;height:48px;border-radius:14px}.social-link svg{width:24px;height:24px}.social-name{display:none}.order-wa{font-size:14px}}
+</style></head><body><div id="brandIntro" aria-hidden="true">
+      <div class="intro-stage">
+        <span class="spot s1"></span><span class="spot s2"></span><span class="spot s3"></span>
+        <span class="spot s4"></span><span class="spot s5"></span><span class="spot s6"></span>
+        <span class="spot s7"></span><span class="spot s8"></span><span class="spot s9"></span>
+        <span class="spot s10"></span><span class="spot s11"></span><span class="spot s12"></span>
+        <span class="spark k1">✦</span><span class="spark k2">✦</span><span class="spark k3">✦</span>
+        <img class="intro-logo" src="assets/logo_bueso_intro.png" alt="">
+      </div>
+    </div>
+<div class="header"><img src="assets/Bueso rojo.png" alt="BUESO Caldito Casero"></div><nav><button data-go="caldito">El caldito</button><button data-go="ingredientes">Ingredientes</button><button data-go="mascotas">Mascotas</button><button data-go="precios">Presentaciones</button><button data-go="pedir">Pedir</button></nav><div id="vp"><main id="world">
+<div class="piece poster" style="left:220px;top:240px;transform:rotate(-2deg)"><div class="mega">CALDITO<br>HASTA EL<br>BUESO.</div><div class="scrib">apapacho en frasco ♡</div></div>
+<img id="caldito" class="piece asset interactive-img" data-popup="caldito" tabindex="0" src="assets/Flyer_Bueso.jpg" style="left:930px;top:120px;width:440px;transform:rotate(-2deg)" alt="Flyer BUESO caldito casero">
+<div class="piece label" style="left:1430px;top:350px">No necesitas estar malito para querer caldito.</div><div class="piece star" style="left:1510px;top:160px">✦</div>
+<div class="piece card" style="left:1800px;top:190px"><h2>¿Qué es BUESO?</h2><p>Caldito casero, cocinado lento y hecho para esos momentos en los que se antoja algo calientito, rico y reconfortante.</p></div>
+<img class="piece photo interactive-img" data-popup="presentaciones" tabindex="0" src="assets/familia-bueso.jpeg" style="left:2460px;top:170px;width:760px;transform:rotate(1deg)" alt="Familia de productos BUESO">
+<img class="piece photo interactive-img" data-popup="ingredientes-flyer" tabindex="0" src="assets/Flyer_Bueso2.jpg" style="left:3500px;top:110px;width:440px;transform:rotate(2deg)" alt="Flyer BUESO de ingredientes">
+
+<div id="ingredientes" class="piece card" style="left:320px;top:1120px;width:610px"><h2>Lo que hay dentro</h2><p>Hueso de res, zanahoria, apio, cúrcuma, jengibre, cebolla, ajo, cilantro, sal y pimienta. Ingredientes sencillos para un caldito con mucho sabor.</p></div>
+<img class="piece asset interactive-img" data-popup="ingredientes" tabindex="0" src="assets/explosivo.png" style="left:1050px;top:930px;width:560px" alt="Ingredientes y frasco BUESO">
+<div class="piece poster" style="left:1700px;top:1050px;background:var(--c);color:var(--r);border:3px solid var(--r)"><div class="mega">LENTO.<br>CASERO.<br>RICO.</div><div class="scrib">24 horas de cocción. Sin prisas, como debe ser.</div></div>
+<img class="piece photo interactive-img" data-popup="ingredientes-mascota" tabindex="0" src="assets/ingredientes-mascota.png" style="left:2420px;top:900px;width:520px;transform:rotate(-1deg)" alt="Ingredientes y caldito BUESO para mascotas">
+<div class="piece label" style="left:2940px;top:1220px">Mexicano hasta el BUESO.</div>
+
+<div id="mascotas" class="piece pet" style="left:3240px;top:980px;transform:rotate(-1deg)"><h2>¿Caldito al lomito?</h2><p>También hay apapacho para ellos: un caldito pensado especialmente para acompañar la comida de tu lomito.</p></div>
+<img class="piece asset interactive-img" data-popup="mascota-producto" tabindex="0" src="assets/bueso-mascota.jpeg" style="left:3900px;top:900px;width:390px;transform:rotate(3deg)" alt="Caldito BUESO para mascotas">
+
+<img id="precios" class="piece photo interactive-img" data-popup="precios" tabindex="0" src="assets/LISTA_DE_PRECIOS_SEP.jpg" style="left:300px;top:1880px;width:650px;transform:rotate(1deg)" alt="Presentaciones y precios de BUESO">
+<div class="piece card" style="left:1120px;top:1940px"><h2>Presentaciones</h2><p>Encuentra aquí las presentaciones disponibles de BUESO y elige la que mejor se acomode a tu antojo.</p></div>
+<img class="piece photo interactive-img" data-popup="mascotas" tabindex="0" src="assets/Flyer_Bueso_Mascotas.jpg" style="left:1840px;top:1790px;width:450px;transform:rotate(-2deg)" alt="Flyer BUESO para mascotas">
+<div class="piece poster" style="left:2540px;top:1920px"><div class="mega">ROJO +<br>CREMA</div><div class="scrib">el corazón visual de BUESO</div></div>
+
+<div id="pedir" class="piece poster" style="left:500px;top:2700px;width:700px"><div class="mega">¿SE TE<br>ANTOJÓ?</div><div class="scrib">Pedir debe ser facilito.</div><p style="font-weight:700">Escríbenos para conocer disponibilidad, entregas y hacer tu pedido.</p><a class="order-wa" href="https://wa.me/525554351329?text=Hola%2C%20vi%20BUESO%20en%20su%20p%C3%A1gina%20web%20y%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener noreferrer">PEDIR POR WHATSAPP ↗</a></div>
+<div class="piece card" style="left:1550px;top:2650px;width:650px"><h2>Un caldito para hacer pausa</h2><p>Para la mañana, para acompañar una comida o simplemente porque se te antojó. BUESO está hecho para entrar fácil en tu día.</p></div><div class="piece star" style="left:2520px;top:2660px;font-size:220px">✹</div>
+</main></div><aside class="social-dock" aria-label="Redes sociales de BUESO"><span class="social-label">+ CONECTA</span><a class="social-link ig" href="https://www.instagram.com/calditodebueso/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de BUESO" title="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" stroke="none"/></svg><span class="social-name">Instagram</span></a><a class="social-link tt" href="https://www.tiktok.com/@calditodebueso?_r=1&amp;_t=ZS-99s9fWJZD8O" target="_blank" rel="noopener noreferrer" aria-label="TikTok de BUESO" title="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.2 3v10.2a4.3 4.3 0 1 1-3.7-4.25v2.8a1.65 1.65 0 1 0 1.1 1.55V3h2.6c.25 2.15 1.5 3.45 3.8 3.7v2.65c-1.55-.05-2.8-.5-3.8-1.3V3z" stroke="none"/></svg><span class="social-name">TikTok</span></a><a class="social-link wa" href="https://wa.me/525554351329?text=Hola%2C%20vi%20BUESO%20en%20su%20p%C3%A1gina%20web%20y%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de BUESO" title="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.1a8.5 8.5 0 0 0-7.35 12.77L3.4 20.5l4.75-1.24A8.5 8.5 0 1 0 12 3.1zm4.95 12.02c-.2.56-1.18 1.07-1.64 1.13-.42.06-.95.08-1.54-.1-.36-.11-.82-.27-1.41-.52-2.48-1.07-4.1-3.58-4.23-3.75-.12-.16-1.01-1.35-1.01-2.57 0-1.22.64-1.82.87-2.07.23-.25.5-.31.67-.31h.48c.15 0 .36-.06.56.43.2.49.69 1.68.75 1.8.06.12.1.27.02.43-.08.16-.12.26-.24.4-.12.14-.25.31-.36.42-.12.12-.24.25-.1.49.14.24.62 1.02 1.34 1.65.92.82 1.7 1.08 1.94 1.2.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.58-.14 1.14z" stroke="none"/></svg><span class="social-name">WhatsApp</span></a><a class="social-link tel" href="tel:+525554351329" aria-label="Llamar a BUESO al 55 5435 1329" title="55 5435 1329"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.7c.42-.1.85.12 1.05.5l1.48 2.84c.18.34.13.75-.13 1.04L7.7 9.55a14.4 14.4 0 0 0 6.75 6.75l1.47-1.3a.92.92 0 0 1 1.04-.13l2.84 1.48c.38.2.6.63.5 1.05l-.55 2.38c-.1.45-.5.77-.96.77C10.31 20.55 3.45 13.69 3.45 5.21c0-.46.32-.86.77-.96L6.6 3.7z" stroke="none"/></svg><span class="social-name">Llamar</span></a></aside><div class="help">Mueve el mouse o arrastra para explorar · usa el minimapa</div><div id="map"><div id="mc"></div></div>
+<div id="discoverTip" aria-hidden="true">+ DESCUBRIR</div>
+<div id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <section class="modal-card">
+    <button class="modal-close" type="button" aria-label="Cerrar">×</button>
+    <span class="modal-kicker" id="modalKicker">BUESO</span>
+    <h2 id="modalTitle"></h2>
+    <div id="modalBody"></div>
+    <button class="modal-action" id="modalAction" type="button"></button>
+  </section>
+</div>
+<script>
+const vp=document.querySelector('#vp'),w=document.querySelector('#world'),map=document.querySelector('#map'),mc=document.querySelector('#mc');
+const W=4700,H=3200,MW=185,MH=128,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let tx=0,ty=0,gx=0,gy=0,d=false,lx=0,ly=0,followEnabled=reduced;
+
+// Margen de cámara: permite llevar el contenido de los bordes completamente al viewport.
+function padX(){return Math.min(360,Math.max(90,innerWidth*.18))}
+function padY(){return Math.min(260,Math.max(70,innerHeight*.16))}
+function bounds(){const px=padX(),py=padY();return {maxX:px,minX:innerWidth-W-px,maxY:py,minY:innerHeight-H-py}}
+function cl(){const b=bounds();gx=Math.min(b.maxX,Math.max(b.minX,gx));gy=Math.min(b.maxY,Math.max(b.minY,gy))}
+
+// Exploración con mouse: ahora recorre TODO el rango navegable, no sólo el 62% central.
+function pointerTarget(e){
+  if(!followEnabled||d||innerWidth<=700||reduced)return;
+  const b=bounds(), nx=Math.max(0,Math.min(1,e.clientX/innerWidth)), ny=Math.max(0,Math.min(1,e.clientY/innerHeight));
+  gx=b.maxX+(b.minX-b.maxX)*nx;
+  gy=b.maxY+(b.minY-b.maxY)*ny;
+  cl();
+}
+vp.addEventListener('mousemove',pointerTarget);
+vp.onpointerdown=e=>{d=true;lx=e.clientX;ly=e.clientY;vp.setPointerCapture(e.pointerId)};
+vp.onpointermove=e=>{if(d){gx+=e.clientX-lx;gy+=e.clientY-ly;lx=e.clientX;ly=e.clientY;cl()}};
+vp.onpointerup=vp.onpointercancel=()=>d=false;
+
+const buttons=[...document.querySelectorAll('[data-go]')];
+buttons.forEach(b=>b.onclick=()=>{
+  const e=document.getElementById(b.dataset.go);
+  gx=innerWidth*.38-e.offsetLeft-e.offsetWidth*.5;
+  gy=innerHeight*.42-e.offsetTop-e.offsetHeight*.5;
+  cl();
+  buttons.forEach(x=>x.classList.toggle('active',x===b));
+});
+setTimeout(()=>{followEnabled=true},reduced?0:3600);
+
+function loop(){
+  // Movimiento de cámara más pausado y estable para reducir la sensación de mareo.
+  // La interpolación baja suaviza el seguimiento y el límite por frame evita saltos bruscos
+  // cuando el cursor cruza grandes distancias del lienzo.
+  if(reduced){
+    tx=gx; ty=gy;
+  }else{
+    const ease=.026, maxStep=20;
+    const dx=(gx-tx)*ease, dy=(gy-ty)*ease;
+    tx+=Math.max(-maxStep,Math.min(maxStep,dx));
+    ty+=Math.max(-maxStep,Math.min(maxStep,dy));
+  }
+  w.style.transform=`translate(${tx}px,${ty}px)`;
+  // Minimapa sincronizado con el mundo real; el marco puede sobrepasar ligeramente sus bordes
+  // para representar el margen extra de cámara.
+  mc.style.left=(-tx/W*MW)+'px';mc.style.top=(-ty/H*MH)+'px';
+  mc.style.width=(innerWidth/W*MW)+'px';mc.style.height=(innerHeight/H*MH)+'px';
+  requestAnimationFrame(loop)
+}
+// Minimapa: cada pieza conserva su marcador y las 8 imágenes interactivas quedan enlazadas 1:1.
+[...w.children].forEach((e,index)=>{
+  const x=document.createElement('i');
+  x.className='dot';
+  x.style.left=((parseFloat(e.style.left)||0)/W*MW)+'px';
+  x.style.top=((parseFloat(e.style.top)||0)/H*MH)+'px';
+  x.style.width=Math.max(4,e.offsetWidth/W*MW)+'px';
+  x.style.height=Math.max(3,e.offsetHeight/H*MH)+'px';
+  if(e.classList.contains('pet'))x.style.background='#2f89a399';
+  if(e.classList.contains('interactive-img')){
+    const key=e.dataset.popup||('image-'+index);
+    e.dataset.mapKey=key;
+    x.dataset.mapKey=key;
+    x.classList.add('image-dot');
+    if(key==='mascotas'||key==='mascota-producto'||key==='ingredientes-mascota')x.dataset.pet='1';
+  }
+  map.appendChild(x);
+});
+function setMapHot(img,on){
+  const key=img.dataset.mapKey;if(!key)return;
+  map.querySelectorAll('.image-dot').forEach(dot=>{
+    if(dot.dataset.mapKey===key){
+      dot.classList.toggle('map-hot',on);
+      dot.classList.toggle('pet-hot',on&&dot.dataset.pet==='1');
+    }
+  });
+}
+
+addEventListener('resize',()=>{cl()});
+if(innerWidth<=700){gx=-90;gy=-120;cl()}
+loop();
+
+
+// --- Descubrir: hover + pop-up contextual para las 8 imágenes ---
+const popupContent={
+  'caldito':{k:'EL CALDITO',t:'Conoce BUESO',b:'<p>Caldito de hueso de res, preparado lentamente para lograr un sabor casero y reconfortante.</p><p><strong>Cocción lenta de 24 horas · 100% natural.</strong></p>',a:'Conoce el caldito →',go:'ingredientes'},
+  'presentaciones':{k:'PRESENTACIONES',t:'La familia BUESO',b:'<p>BUESO tiene presentaciones para distintos momentos: el caldito de res y la línea pensada para mascotas.</p><p>Explora tamaños y precios disponibles.</p>',a:'Ver presentaciones →',go:'precios'},
+  'ingredientes-flyer':{k:'LO QUE HAY DENTRO',t:'Ingredientes reales',b:'<p>Una combinación sencilla de ingredientes que forman parte de la identidad de BUESO.</p><ul><li>Cúrcuma, cebolla y zanahoria</li><li>Perejil, jengibre y ajo</li><li>Cilantro y apio</li></ul>',a:'Ver ingredientes →',go:'ingredientes'},
+  'ingredientes':{k:'INGREDIENTES',t:'¿Qué lleva BUESO?',b:'<p>Cúrcuma · cebolla · zanahoria · perejil · jengibre · ajo · cilantro · apio.</p><p>Ingredientes sencillos y una cocción lenta que construyen el perfil del caldito.</p>',a:'Explorar ingredientes →',go:'ingredientes'},
+  'ingredientes-mascota':{k:'MASCOTIJA',t:'Ingredientes para su versión',b:'<p>Esta pieza presenta la versión BUESO para mascotas junto con algunos de sus ingredientes.</p><p>La línea para mascotas tiene su propio espacio dentro de la experiencia BUESO.</p>',a:'Conocer Mascotija →',go:'mascotas'},
+  'mascota-producto':{k:'PARA MASCOTAS',t:'BUESO Mascotija',b:'<p>Una presentación pensada para acompañar la comida de tu lomito y darle un toque especial.</p><p>Conoce la sección dedicada a BUESO para mascotas.</p>',a:'Ir a mascotas →',go:'mascotas'},
+  'precios':{k:'PRECIOS',t:'Presentaciones y pedidos',b:'<p>Aquí puedes consultar las presentaciones y precios mostrados por BUESO.</p><p>Cuando estés listo, ve a la zona de pedido para conocer disponibilidad y entregas.</p>',a:'Quiero pedir →',go:'pedir'},
+  'mascotas':{k:'¿TAMBIÉN PARA ELLOS?',t:'Apapacho para tu lomito',b:'<p>BUESO también tiene una propuesta para mascotas. Esta sección reúne la identidad y la presentación pensada para ellos.</p>',a:'Explorar mascotas →',go:'mascotas'}
+};
+const modal=document.querySelector('#productModal'),modalTitle=document.querySelector('#modalTitle'),modalBody=document.querySelector('#modalBody'),modalKicker=document.querySelector('#modalKicker'),modalAction=document.querySelector('#modalAction'),tip=document.querySelector('#discoverTip');
+let pointerDownAt=null,activePopup=null;
+function showTip(e){if(innerWidth<=700)return;tip.style.left=e.clientX+'px';tip.style.top=e.clientY+'px';tip.classList.add('on')}
+function hideTip(){tip.classList.remove('on')}
+function openPopup(key){const c=popupContent[key];if(!c)return;activePopup=c;modalKicker.textContent=c.k;modalTitle.textContent=c.t;modalBody.innerHTML=c.b;modalAction.textContent=c.a;modal.classList.add('open');modal.setAttribute('aria-hidden','false');hideTip();setTimeout(()=>document.querySelector('.modal-close').focus(),60)}
+function closePopup(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');activePopup=null}
+document.querySelectorAll('.interactive-img').forEach(img=>{
+  img.addEventListener('mouseenter',e=>{showTip(e);setMapHot(img,true)});img.addEventListener('mousemove',showTip);img.addEventListener('mouseleave',()=>{hideTip();setMapHot(img,false)});img.addEventListener('focus',()=>setMapHot(img,true));img.addEventListener('blur',()=>setMapHot(img,false));
+  img.addEventListener('pointerdown',e=>{pointerDownAt={x:e.clientX,y:e.clientY};e.stopPropagation()});
+  img.addEventListener('pointerup',e=>{e.stopPropagation();const p=pointerDownAt||{x:e.clientX,y:e.clientY};const moved=Math.hypot(e.clientX-p.x,e.clientY-p.y);pointerDownAt=null;if(moved<=10)openPopup(img.dataset.popup)});
+  img.addEventListener('click',e=>{e.preventDefault();e.stopPropagation()});
+  img.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPopup(img.dataset.popup)}});
+});
+document.querySelector('.modal-close').onclick=closePopup;
+modal.addEventListener('click',e=>{if(e.target===modal)closePopup()});
+modalAction.onclick=()=>{if(!activePopup)return;const go=activePopup.go,target=document.getElementById(go);closePopup();if(target){gx=innerWidth*.38-target.offsetLeft-target.offsetWidth*.5;gy=innerHeight*.42-target.offsetTop-target.offsetHeight*.5;cl();buttons.forEach(x=>x.classList.toggle('active',x.dataset.go===go))}};
+addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closePopup()});
+
+</script></body></html>
